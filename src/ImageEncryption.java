@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -564,6 +565,7 @@ public class ImageEncryption {
 				output.setRGB(x, y, color.getRGB());
 			}
 		}
+		
 	}
 
 	/**
