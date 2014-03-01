@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2013-2014 Andreas Holley, Ryan Jackman
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package com.github.imageencryption;
 
 import java.awt.Color;
@@ -31,10 +46,18 @@ public class ImageEncryption {
 	public static BufferedImage encryptText(BufferedImage key, String text) {
 		return encrypt(encrypt(key, "text".getBytes(), 0), text.getBytes(), 1);
 	}
-	
-	
+
+	/**
+	 * Decrypt an image that has been encrypted to store text.
+	 * 
+	 * @param key
+	 *            the key image that was used to encrypt the image.
+	 * @param code
+	 *            the encrypted image that contains the text.
+	 * @return the encrypted text.
+	 */
 	public static String decryptText(BufferedImage key, BufferedImage code) {
-		return new String(decrypt(key,code,1));
+		return new String(decrypt(key, code, 1));
 	}
 
 	private static byte[] decrypt(BufferedImage key, BufferedImage code, int ys) {
@@ -71,7 +94,7 @@ public class ImageEncryption {
 
 		return b;
 	}
-	
+
 	private static List<String> getParts(String string, int partitionSize) {
 		List<String> parts = new ArrayList<String>();
 		int len = string.length();
@@ -131,8 +154,7 @@ public class ImageEncryption {
 							c[i] += 2;
 						else
 							c[i] -= 2;
-						System.out.println("adding break at " + i + " " + x
-								+ " " + y);
+						System.out.println("adding break at " + i + " " + x + " " + y);
 						Color color = new Color(c[0], c[1], c[2], alpha);
 						encrypted.setRGB(x, y, color.getRGB());
 
@@ -155,11 +177,9 @@ public class ImageEncryption {
 	}
 
 	public static void main(String[] args) throws IOException {
-		BufferedImage key = ImageIO.read(new File(
-				"C:\\Users\\Andreas\\Desktop\\image.png"));
+		BufferedImage key = ImageIO.read(new File("C:\\Users\\Andreas\\Desktop\\image.png"));
 		BufferedImage result = encryptText(key, "Hello, world!");
-		ImageIO.write(result, "png", new File(
-				"C:\\Users\\Andreas\\Desktop\\result.png"));
+		ImageIO.write(result, "png", new File("C:\\Users\\Andreas\\Desktop\\result.png"));
 		System.out.println(decryptText(key, result).equals("Hello, world!"));
 		System.out.println("Finished!");
 	}
