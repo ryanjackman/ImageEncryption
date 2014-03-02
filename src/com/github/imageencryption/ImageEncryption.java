@@ -21,6 +21,9 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +51,20 @@ public class ImageEncryption {
 	}
 
 	/**
+	 * Get an image containing an encrypted file.
+	 * 
+	 * @param key
+	 *            the {@link BufferedImage} to use as the key.
+	 * @param file
+	 *            the file to encrypt.
+	 * @return the encrypted image.
+	 */
+	public static BufferedImage encryptFile(BufferedImage key, File file) {
+		return encrypt(encrypt(key, file.getName().getBytes(), 0),
+				fileToBytes(file), 1);
+	}
+
+	/**
 	 * Decrypt an image that has been encrypted to store text.
 	 * 
 	 * @param key
@@ -58,6 +75,19 @@ public class ImageEncryption {
 	 */
 	public static String decryptText(BufferedImage key, BufferedImage code) {
 		return new String(decrypt(key, code, 1));
+	}
+
+	/**
+	 * Decrypt an image that has been encrypted to store a file.
+	 * 
+	 * @param key
+	 *            the key image that was used to encrypt the image.
+	 * @param code
+	 *            the encrypted image that contains the text.
+	 * @return a byte[] of the file's contents.
+	 */
+	public static byte[] decryptFile(BufferedImage key, BufferedImage code) {
+		return decrypt(key, code, 1);
 	}
 
 	private static byte[] decrypt(BufferedImage key, BufferedImage code, int ys) {
@@ -154,7 +184,8 @@ public class ImageEncryption {
 							c[i] += 2;
 						else
 							c[i] -= 2;
-						System.out.println("adding break at " + i + " " + x + " " + y);
+						System.out.println("adding break at " + i + " " + x
+								+ " " + y);
 						Color color = new Color(c[0], c[1], c[2], alpha);
 						encrypted.setRGB(x, y, color.getRGB());
 
@@ -176,10 +207,22 @@ public class ImageEncryption {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
+	private static byte[] fileToBytes(File file) {
+		try {
+			Path path = Paths.get(file.getAbsolutePath());
+			return Files.readAllBytes(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static void main(String[] args) throws IOException {
-		BufferedImage key = ImageIO.read(new File("C:\\Users\\Andreas\\Desktop\\image.png"));
+		BufferedImage key = ImageIO.read(new File(
+				"C:\\Users\\Andreas\\Desktop\\image.png"));
 		BufferedImage result = encryptText(key, "Hello, world!");
-		ImageIO.write(result, "png", new File("C:\\Users\\Andreas\\Desktop\\result.png"));
+		ImageIO.write(result, "png", new File(
+				"C:\\Users\\Andreas\\Desktop\\result.png"));
 		System.out.println(decryptText(key, result).equals("Hello, world!"));
 		System.out.println("Finished!");
 	}
