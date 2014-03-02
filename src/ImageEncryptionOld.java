@@ -47,7 +47,7 @@ import sun.awt.shell.ShellFolder;
  *
  * @author Ryan Jackman
  */
-public class ImageEncryption {
+public class ImageEncryptionOld {
 
 	private JFrame frame;
 	private final JFileChooser fc = new JFileChooser();
@@ -72,14 +72,14 @@ public class ImageEncryption {
 	 * @param args Command line arguments
 	 */
 	public static void main(String[] args) {
-		new ImageEncryption();
+		new ImageEncryptionOld();
 	}
 
 	/**
 	 * Sets the look and feel of the window and initializes the components
 	 *
 	 */
-	public ImageEncryption() {
+	public ImageEncryptionOld() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Throwable e) {
